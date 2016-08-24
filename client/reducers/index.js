@@ -12,6 +12,7 @@ const productReducer = (state, action) => {
       update[product.id] = updatedProduct
       return Object.assign({}, state, update)
     case 'REMOVE_FROM_CART':
+      console.log('Adding back to the stock');
       var product = state[action.payload.productId]
       var updatedProduct = Object.assign({}, product, { stock: product.stock +1 } )
       var update = {}
@@ -29,7 +30,10 @@ const cartReducer = (state, action) => {
     case 'ADD_TO_CART':
       return [...state, action.payload.productId]
     case 'REMOVE_FROM_CART' :
-      return [...state.slice(0, action.payload.productId.length)]
+      console.log('Removing item from cart');
+    return  [ ...state.slice(0,state.indexOf(action.productId),
+         ...state.slice(state.indexOf(action.productId)+1))
+     ]
     default:
       return state
   }
@@ -41,9 +45,8 @@ const totalReducer = (state, action) => {
     case 'ADD_TO_CART':
       return state + action.payload.price
     case 'REMOVE_FROM_CART' :
-      if (state.total >= action.payload.price) {
+    console.log('Removing price from total');
         return state - action.payload.price
-      }
     default:
       return state
   }
