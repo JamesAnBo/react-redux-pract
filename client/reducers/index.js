@@ -30,10 +30,14 @@ const cartReducer = (state, action) => {
     case 'ADD_TO_CART':
       return [...state, action.payload.productId]
     case 'REMOVE_FROM_CART' :
+      const newState = Object.assign([{}], state)
       console.log('Removing item from cart');
-    return  [ ...state.slice(0,state.indexOf(action.productId),
-         ...state.slice(state.indexOf(action.productId)+1))
-     ]
+      const itemIndex = state.indexOf(action.payload.productId)
+      console.log('This is the itemIndex ', itemIndex);
+      if (itemIndex != -1){
+        newState.splice(itemIndex, 1)
+      }
+    return newState
     default:
       return state
   }
